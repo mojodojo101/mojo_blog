@@ -1,0 +1,39 @@
+title: Mojodojo's Infosec Endeavor
+markdown: kramdown
+url: ""
+baseurl: "mojo_blog"
+
+# for atom feed
+author:
+  name: Mojo
+  email: cnn.mr.hide@googlemail.com
+  twitter: Mojodojo_101
+  github: mojodojo101
+
+plugins:
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+paginate_path: "/page:num/"
+
+paginate: 5
+
+collections_dir: all_collections
+collections:
+  posts:
+    output: true
+  projects:
+    output: true
+  services:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "post"
+
+
+exclude: ['sitemap.xml','feed.xml', 'LICENSE', 'README.md']

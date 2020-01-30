@@ -1,0 +1,63 @@
+---
+layout: doc 
+title: Manual Service Enumeration
+date: 2020-01-30
+author: Mojo
+categories: ["Service Enumeration"]
+---
+# **Smbclient**
+Smbclient lets you enumerate smbshares quickly and without making
+too much noise.
+
+#### Listing shares:
+```bash
+	smbclient -L //<ip>         # -L ==listshars
+	smbclient -U "<username>" -L //<ip> "<password>"	 #   try -U  "guest"| "" |"anonymous"
+	
+```
+
+#### Connecting to shares:
+
+```bash
+	smbclient -U "<username>" //<ip>/<share> "<password>"
+ 	smbclient -U "" //<ip>/<share> -c 'recurse;ls' " "  > smbdirs  # show files on share
+```
+
+# **Smbmap**
+
+
+#### Listing shares:
+```bash
+       smbmap -H <ip>          #-H ==host	
+	smbmap -H <ip> -u "<username>" -p "<password>"
+```
+#### Executing commands:
+```bash
+       smbmap -H <ip> -u "<username>" -p "<password>" -x "cmd-command to execute" 
+	smbmap -H <ip> -u "<username>" -p "<password>" -X "ps-command to execute" 
+```
+
+# **Enum4linux**
+* this isnt really manual anymore and very noisy but it combines a bunch of tools
+*to get workgroups, shares, permissions ...
+
+```bash
+	enum4linux <ip> -u "<username>" -p "<password" > enum4linux.txt
+```
+# **Smbcacls**
+*this one lets u check for ACL
+
+```bash
+
+	smbcacls //<ip>/<share> /<dir> -U <user>%<password>
+```
+# **Important Articles**
+
+[ACL stuff so u will be able to understand smbcacls better](https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/november/access-control-understanding-windows-file-and-registry-permissions)
+
+[more tools](https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/)
+
+[Dropping scf files on smb shares](https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/)
+
+[About NTLM](https://visualitynq.com/articles/95-server-message-block-smb-most-important-features)
+

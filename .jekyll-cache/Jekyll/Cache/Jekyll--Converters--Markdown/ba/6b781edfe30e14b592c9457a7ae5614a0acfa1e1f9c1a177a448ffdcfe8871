@@ -1,0 +1,52 @@
+I"s<h1 id="smbclient"><strong>Smbclient</strong></h1>
+<p>Smbclient lets you enumerate smbshares quickly and without making
+too much noise.</p>
+
+<h4 id="listing-shares">Listing shares:</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	smbclient <span class="nt">-L</span> //&lt;ip&gt;         <span class="c"># -L ==listshars</span>
+	smbclient <span class="nt">-U</span> <span class="s2">"&lt;username&gt;"</span> <span class="nt">-L</span> //&lt;ip&gt; <span class="s2">"&lt;password&gt;"</span>	 <span class="c">#   try -U  "guest"| "" |"anonymous"</span>
+	
+</code></pre></div></div>
+
+<h4 id="connecting-to-shares">Connecting to shares:</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	smbclient <span class="nt">-U</span> <span class="s2">"&lt;username&gt;"</span> //&lt;ip&gt;/&lt;share&gt; <span class="s2">"&lt;password&gt;"</span>
+ 	smbclient <span class="nt">-U</span> <span class="s2">""</span> //&lt;ip&gt;/&lt;share&gt; <span class="nt">-c</span> <span class="s1">'recurse;ls'</span> <span class="s2">" "</span>  <span class="o">&gt;</span> smbdirs  <span class="c"># show files on share</span>
+</code></pre></div></div>
+
+<h1 id="smbmap"><strong>Smbmap</strong></h1>
+
+<h4 id="listing-shares-1">Listing shares:</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       smbmap <span class="nt">-H</span> &lt;ip&gt;          <span class="c">#-H ==host	</span>
+	smbmap <span class="nt">-H</span> &lt;ip&gt; <span class="nt">-u</span> <span class="s2">"&lt;username&gt;"</span> <span class="nt">-p</span> <span class="s2">"&lt;password&gt;"</span>
+</code></pre></div></div>
+<h4 id="executing-commands">Executing commands:</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       smbmap <span class="nt">-H</span> &lt;ip&gt; <span class="nt">-u</span> <span class="s2">"&lt;username&gt;"</span> <span class="nt">-p</span> <span class="s2">"&lt;password&gt;"</span> <span class="nt">-x</span> <span class="s2">"cmd-command to execute"</span> 
+	smbmap <span class="nt">-H</span> &lt;ip&gt; <span class="nt">-u</span> <span class="s2">"&lt;username&gt;"</span> <span class="nt">-p</span> <span class="s2">"&lt;password&gt;"</span> <span class="nt">-X</span> <span class="s2">"ps-command to execute"</span> 
+</code></pre></div></div>
+
+<h1 id="enum4linux"><strong>Enum4linux</strong></h1>
+<ul>
+  <li>this isnt really manual anymore and very noisy but it combines a bunch of tools
+*to get workgroups, shares, permissions …</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	enum4linux &lt;ip&gt; <span class="nt">-u</span> <span class="s2">"&lt;username&gt;"</span> <span class="nt">-p</span> <span class="s2">"&lt;password"</span> <span class="o">&gt;</span> enum4linux.txt
+</code></pre></div></div>
+<h1 id="smbcacls"><strong>Smbcacls</strong></h1>
+<p>*this one lets u check for ACL</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+	smbcacls //&lt;ip&gt;/&lt;share&gt; /&lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="nt">-U</span> &lt;user&gt;%&lt;password&gt;
+</code></pre></div></div>
+<h1 id="important-articles"><strong>Important Articles</strong></h1>
+
+<p><a href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/november/access-control-understanding-windows-file-and-registry-permissions">ACL stuff so u will be able to understand smbcacls better</a></p>
+
+<p><a href="https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/">more tools</a></p>
+
+<p><a href="https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/">Dropping scf files on smb shares</a></p>
+
+<p><a href="https://visualitynq.com/articles/95-server-message-block-smb-most-important-features">About NTLM</a></p>
+
+:ET
