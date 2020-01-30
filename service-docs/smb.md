@@ -53,11 +53,11 @@ too much noise.
 ```
 # **Important Articles**
 
-[ACL stuff | microsoft.com](https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/november/access-control-understanding-windows-file-and-registry-permissions)
+[ACL stuff. microsoft.com](https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/november/access-control-understanding-windows-file-and-registry-permissions)
 
-[enum-tools | hackingarticles.in](https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/)
+[Enum-tools. hackingarticles.in](https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/)
 
-[Dropping scf files on smb shares | pentestlab.blog](https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/)
+[Dropping scf files on smb shares. pentestlab.blog](https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/)
 
-[About NTLM | visualitynq.com](https://visualitynq.com/articles/95-server-message-block-smb-most-important-features)
+[About NTLM. visualitynq.com](https://visualitynq.com/articles/95-server-message-block-smb-most-important-features)
 
