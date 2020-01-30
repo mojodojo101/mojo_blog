@@ -1,7 +1,7 @@
 title: Mojodojo's Infosec Endeavor
 markdown: kramdown
 url: ""
-baseurl: "mojo_blog"
+baseurl: ""
 
 # for atom feed
 author:
