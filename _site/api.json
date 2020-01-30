@@ -6,7 +6,7 @@
             {
                 "title": "Manual Service Enumeration",
                 "content_text": "Guides for enumerating services with tools like:  Netcat/Telnet  Smbclient/Smbmap  Ftp/NcftpSMB | Server Message Block ",
-                "content_html": "<h1 id=\"guides-for-enumerating-services-with-tools-like\"><strong>Guides for enumerating services with tools like:</strong></h1><ul>  <li>Netcat/Telnet</li>  <li>Smbclient/Smbmap</li>  <li>Ftp/Ncftp</li></ul><h2 id=\"smb--server-message-block-\"><a href=\"/service-docs/smb.html\">SMB | Server Message Block </a></h2>",
+                "content_html": "<h1 id=\"guides-for-enumerating-services-with-tools-like\"><strong>Guides for enumerating services with tools like:</strong></h1><ul>  <li>Netcat/Telnet</li>  <li>Smbclient/Smbmap</li>  <li>Ftp/Ncftp</li></ul><h2 id=\"smb--server-message-block-\"><a href=\"/mojo_blog/service-docs/smb.html\">SMB | Server Message Block </a></h2>",
                 "url": "http://localhost:4000/mojo_blog/service%20enumeration/2020/01/30/ManualServiceEnumeration.html",
                 
                 
