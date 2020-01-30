@@ -29,6 +29,9 @@ OID                    |  Resource
     snmpwalk -c <public> -v1 <ip> <oid>
 ```
 
-
-
+# **Important Articles**
+[SNMP. microsoft.com](https://docs.microsoft.com/en-us/windows/win32/snmp/snmp-start-page)
+[High level protocol overview. comparitech.com](https://www.comparitech.com/net-admin/snmp-mibs-oids-explained/)
+[Understanding snmpv3. youtube.com](https://www.youtube.com/watch?v=YZ5gBrA0B0U)
+[CCNA. youtube.com](https://www.youtube.com/watch?v=tg47MZdtcAE)
 
