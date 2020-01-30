@@ -52,10 +52,32 @@ main {
 	grid-gap: 1.4rem;
 	line-height: 1.5rem;
 }
-
+/*
 .content a {
 	text-decoration: underline;
 }
+*/
+.content a {
+	text-decoration: none;
+	position: relative;
+	color: #f78e66 !important;
+	/* color: #72b6b5 !important; */
+}
+
+.content a:after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0%;
+	border-bottom: 2px solid #f78e66;
+	transition: 0.4s;
+}
+
+.content a:hover:after {
+	width: 100%;
+}
+
 
 .post-list a {
 	text-decoration: none;
