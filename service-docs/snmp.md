@@ -7,7 +7,7 @@ categories: ["Service Enumeration"]
 ---
 # Some examples of Oid to plaintext
 
-|-----------------------+------------------|
+|:----------------------+:-----------------|
 |OID                    |  Resource        |
 |-----------------------|------------------|
 |1.3.6.1.2.1.25.1.6.0   | System Processes | 
