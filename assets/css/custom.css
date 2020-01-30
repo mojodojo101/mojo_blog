@@ -52,11 +52,7 @@ main {
 	grid-gap: 1.4rem;
 	line-height: 1.5rem;
 }
-/*
-.content a {
-	text-decoration: underline;
-}
-*/
+
 .content a {
 	text-decoration: none;
 	position: relative;
