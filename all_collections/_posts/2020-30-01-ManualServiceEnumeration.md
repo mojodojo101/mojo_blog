@@ -11,4 +11,4 @@ categories: ["Service Enumeration"]
 *	Ftp/Ncftp
 
 
-## [SMB | Server Message Block ](/service-docs/smb.html)
+## [SMB | Server Message Block ](/mojo_blog/service-docs/smb.html)
