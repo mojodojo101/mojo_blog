@@ -5,7 +5,17 @@ date: 2020-01-30
 author: Mojo
 categories: ["Service Enumeration"]
 ---
-# Some examples of Oid to plaintext
+# Its a good idea to install snmp-mibs
+*this will let you read the oids in plain-text
+```bash
+    apt-get install snmp-mibs-downloader
+    download-mibs
+    #also in your /etc/snmp/snmp.conf add a # before mibs:
+```
+![snmp-mibs-conf](/mojo_blog/assests/pictures/services/snmp-mibs-conf.PNG)
+
+
+# Some examples of Oid to plaintext for Windows
 
 |:----------------------+:-----------------|
 |OID                    |  Resource        |
@@ -31,9 +41,25 @@ categories: ["Service Enumeration"]
     snmpwalk -c <public> -v1 <ip> <oid>
 ```
 
+
+# **[braa](https://github.com/mteg/braa)**
+* I didnt get a chance to teast this one yet 
+* But from what i have heard this lets u download oids way faster
+```bash
+     braa <communitystring>@<ip>:<oid>
+     braa <public>@10.10.10.10:.1.3.6.*
+```
+
+
+
 # **Important Articles**
+[Braa and grep for important oids. hacktricks.xyz](https://book.hacktricks.xyz/pentesting/pentesting-snmp#massive-snmp)
+
 [SNMP. microsoft.com](https://docs.microsoft.com/en-us/windows/win32/snmp/snmp-start-page)
+
 [High level protocol overview. comparitech.com](https://www.comparitech.com/net-admin/snmp-mibs-oids-explained/)
+
 [Understanding snmpv3. youtube.com](https://www.youtube.com/watch?v=YZ5gBrA0B0U)
+
 [CCNA. youtube.com](https://www.youtube.com/watch?v=tg47MZdtcAE)
 
