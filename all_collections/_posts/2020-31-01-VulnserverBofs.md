@@ -3,7 +3,7 @@ layout: post
 title: Vulnserver
 date: 2020-01-30
 author: Mojo
-categories: ["Bof"]
+categories: ["PE File Format"]
 ---
 # **Some walk throughs on [Vulnserver](https://github.com/stephenbradshaw/vulnserver)**
 

@@ -8,7 +8,7 @@ categories: ["Bof"]
 
 # ** TRUN **
 
-This is probaply the best place to start on vulnserver.
+This is propably the best place to start on vulnserver.
 The function is straight forward once you know what triggers the bof.
 
 I read vulnserver.c but you can also fuzz for these with tools like [spike](https://github.com/guilhermeferreira/spikepp/tree/master/SPIKE).
@@ -92,7 +92,7 @@ send payload to 192.168.138.139:9999 with total length of 2018 .
 ```
 ![trun-crash-2](/mojo_blog/assets/pictures/bofs/vulnserver/trun-crash-1.PNG)
 
-As we can see we overwrote EIP with 4* 0x44 which corresponds to the bytes 2013-2016 since the last two bytes are our \r\n.
+We overwrote EIP with 4* 0x44 which corresponds to the bytes 2013-2016 since the last two bytes are our \r\n.
 
 Now we should check for bad chars by using the -f fuzzbc (Fuzz bad charackters) Fucntion.
 
@@ -105,7 +105,7 @@ send payload to 192.168.138.139:9999 with total length of 2274 .
 
 ![trun-bc-1](/mojo_blog/assets/pictures/bofs/vulnserver/trun-bc-1.PNG)
 
-As we can see the first byte in our bad chars fuzz buffer "0x00" stopped the server from recieving more information.
+The first byte in our bad chars fuzz buffer "0x00" stopped the server from recieving more information.
 We add the -b "0x00" flag to blacklist that byte.
 
 ```
@@ -126,20 +126,20 @@ And indeed our buffer stops exactly at 0x23dfadf.
      23dfadf
 ```
 
-The next step is to search for a gadget that lets us jump to our shellcode. Since i turned DEP and ASLR off for this exercise we can just search for a JMP ESP statement. Using msf-nasm-shell or my personal favorite rasm2 we can find the right opcode for this.
+Search for a gadget that lets us jump to our shellcode. Since i turned DEP and ASLR off for this exercise we can just search for a JMP ESP statement. Using msf-nasm-shell or my personal favorite rasm2 we can find the right opcode for this.
 
 ```bash
     rasm2 -a x86 -b 32  "jmp esp"
     #returns ffe4
 ```
-Now we can use "!mona modules" in Immunity-debugger-console to find modules which have little protection. vulnserver.exe and essfunc.dll seem like a good source of gadgets.
+Use "!mona modules" in Immunity-debugger-console to find modules which have little protection. vulnserver.exe and essfunc.dll seem like a good source of gadgets.
 ```cmd
     !mona modules
 ```
 
 ![mona-modules](/mojo_blog/assets/pictures/bofs/vulnserver/trun-mona-modules.PNG)
 
-Next we ll search for our jmp esp in the modules.
+Search for our jmp esp in the modules.
 ```cmd
     !mona find -s "\xff\xe4" -m essfunc.dll
 ```
@@ -152,7 +152,7 @@ This means we have all the pieces to craft our script.
 To recap we need;
 1. "Trun ." to trigger the exploit. (total length 6)
 2. 2006 bytes of random chars which are not 0s (total length 2012)
-3. Now our EIP which will be 0x625011af reversed since windows uses little endian for everything but Networking 
+3. EIP, which will be 0x625011af reversed since windows uses little endian for everything but Networking 
 -> 0xaf115062
 4. Some NOP aka 0x90 to give our exploit space on the stack
 

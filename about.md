@@ -4,7 +4,8 @@ layout: page
 ---
 
 > Greetings Traveler
-> Here are some random Links for you
+
+> Here are some random links for you
 
 
 My Social Media Links
