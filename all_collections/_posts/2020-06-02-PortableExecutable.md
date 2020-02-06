@@ -40,7 +40,7 @@ This code will simply take the first argument we pass to our Exe and print "Hell
   <summary>Portable Executable</summary>
   
 
-  1. <details><summary>DOS Header 64 bytes </summary>
+  1. <details><summary>DOS Header 64 bytes </summary><p>
        
         |:----------------+:---------------+:-----------------------------------------------------------|
         |Offset           |Value           | Meaning                                                    |
@@ -49,11 +49,11 @@ This code will simply take the first argument we pass to our Exe and print "Hell
         |0x3c             |0x0100          |E-lfanew: The offset to the start of the Pe Header          |
     
 ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-hex-dos-header.PNG)
-
+</p>
 </details>
 
 
-  2. <details><summary>PE Header</summary>
+  2. <details><summary>PE Header</summary><p>
 
         |:----------------+:---------------+:----------------------------------|
         |Offset           |Value           | Meaning                           |
@@ -86,19 +86,19 @@ This code will simply take the first argument we pass to our Exe and print "Hell
         2. IMAGE_FILE_DEBUG_STRIPPED 0x0200.Debugging information is removed from the image file.
 
 ![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
-
+</p>
 </details>
 
-  3. <details><summary>Optional Header 224 bytes</summary>
+  3. <details><summary>Optional Header 224 bytes</summary><p>
         The Last 128 bytes contain the Data Directory
 
-        |:----------------+:---------------+:---------------|
-        |Offset           |Value           | Meaning        |
-        |-----------------|----------------|----------------|
-        |0x0118|0x0b01|Magic Number: either 0x10b or 0x20b|
+        |:----------------+:---------------+:----------------------------------|
+        |Offset           |Value           | Meaning                           |
+        |-----------------|----------------|-----------------------------------|
+        |0x0118           |0x0b01          |Magic Number: either 0x10b or 0x20b|
         
         
-  
+  </p>
 
 </details>
 
