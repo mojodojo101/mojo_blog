@@ -39,7 +39,7 @@ This code will simply take the first argument we pass to our Exe and print "Hell
 ### Portable Executable
     
 
-<details><summary>DOS Header 64 bytes </summary>
+#### DOS Header 64 bytes 
 
 |:----------------+:---------------+:-----------------------------------------------------------|
 |Offset           |Value           | Meaning                                                    |
@@ -49,9 +49,9 @@ This code will simply take the first argument we pass to our Exe and print "Hell
 
 ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-hex-dos-header.PNG)
 
-</details>
 
-<details><summary>PE Header</summary>
+
+#### PE Header
 
 |:----------------+:---------------+:----------------------------------|
 |Offset           |Value           | Meaning                           |
@@ -60,7 +60,7 @@ This code will simply take the first argument we pass to our Exe and print "Hell
 |0x0104           |20 bytes        |Image File Header                  |
 |0x0118           |224 bytes       |Optional Header                    |
 
-<details><summary>File Header</summary>
+#### File Header
 
 The location of the Header will depend on the E-lfanew value in the Dos Header
 
@@ -75,18 +75,20 @@ The location of the Header will depend on the E-lfanew value in the Dos Header
 |0x0114           |0xE000          |Size of Optional Header                                  |
 |0x0116           |0x0201          |Characteristics: see below                               |
 
-<details><summary>Characteristics 0x0201</summary>
-
-![Characteristics](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#characteristics)
-
-1. MAGE_FILE_RELOCS_STRIPPED 0x0001. Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the reports an   error. The default behavior of the linker is to strip base relocations from executable (EXE) files.
-2. IMAGE_FILE_DEBUG_STRIPPED 0x0200.Debugging information is removed from the image file.
 
 ![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
 
+[Characteristics](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#characteristics)
+
+<details><summary>Characteristics 0x0201</summary>
+1. MAGE_FILE_RELOCS_STRIPPED 0x0001. Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the reports an   error. The default behavior of the linker is to strip base relocations from executable (EXE) files.
+2. IMAGE_FILE_DEBUG_STRIPPED 0x0200.Debugging information is removed from the image file.
+
 </details>
 
-<details><summary>Optional Header 224 bytes</summary>
+
+
+#### Optional Header 224 bytes
 
 The Last 128 bytes contain the Data Directory
 
@@ -95,7 +97,7 @@ The Last 128 bytes contain the Data Directory
 |-----------------|----------------|-----------------------------------|
 |0x0118           |0x0b01          |Magic Number: either 0x10b or 0x20b|
 
-</details>
+
 
 
 
