@@ -3,7 +3,7 @@ layout: post
 title: Having A Look At Portable Executables
 date: 2020-01-30
 author: Mojo
-categories: ["Service Enumeration"]
+categories: [""]
 ---
 
 # **Examining Windows EXEs and DLLs**
@@ -48,7 +48,7 @@ This code will simply take the first argument we pass to our Exe and print "Hell
         |0x00|0x4D5A or MZ|E-magic: Stands for Mark Zbikowsky who created the PE format|
         |0x3c|0x0100|E-lfanew: The offset to the start of the Pe Header|
     
-        ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-hex-dos-header.PNG)
+    ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-hex-dos-header.PNG)
 
 </details>
 
@@ -75,7 +75,7 @@ This code will simply take the first argument we pass to our Exe and print "Hell
         |0x0114|0xE000|Size of Optional Header|
         |0x0116|0x0201|Characteristics: see below|
 
-         ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
+    ![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
 
         <details><summary>Characteristics 0x0201</summary>
   
