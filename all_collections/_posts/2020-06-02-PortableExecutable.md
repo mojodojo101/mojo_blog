@@ -40,22 +40,30 @@ This code will simply take the first argument we pass to our Exe and print "Hell
     
 
 <details><summary>DOS Header 64 bytes </summary>
+
 |:----------------+:---------------+:-----------------------------------------------------------|
 |Offset           |Value           | Meaning                                                    |
 |-----------------|----------------|------------------------------------------------------------|
 |0x00             |0x4D5A or MZ    |E-magic: Stands for Mark Zbikowsky who created the PE format|
 |0x3c             |0x0100          |E-lfanew: The offset to the start of the Pe Header          |
+
 ![Dos Header](/mojo_blog/assets/pictures/portable-executable/pe-hex-dos-header.PNG)
+
 </details>
+
 <details><summary>PE Header</summary>
+
 |:----------------+:---------------+:----------------------------------|
 |Offset           |Value           | Meaning                           |
 |-----------------|----------------|-----------------------------------|
 |0x0100           |0x50450000      |Signature: "PE" folloewd by 2x 0x00|
 |0x0104           |20 bytes        |Image File Header                  |
 |0x0118           |224 bytes       |Optional Header                    |
+
 <details><summary>File Header</summary>
+
 The location of the Header will depend on the E-lfanew value in the Dos Header
+
 |:----------------+:---------------+:--------------------------------------------------------|
 |Offset           |Value           | Meaning                                                 |
 |-----------------|----------------|---------------------------------------------------------|
@@ -66,16 +74,22 @@ The location of the Header will depend on the E-lfanew value in the Dos Header
 |0x0110           |0x00000000      |Number of symbols                                        |
 |0x0114           |0xE000          |Size of Optional Header                                  |
 |0x0116           |0x0201          |Characteristics: see below                               |
+
 <details><summary>Characteristics 0x0201</summary>
 
-Characteristics](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#characteristics)
+![Characteristics](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#characteristics)
+
 1. MAGE_FILE_RELOCS_STRIPPED 0x0001. Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the reports an   error. The default behavior of the linker is to strip base relocations from executable (EXE) files.
 2. IMAGE_FILE_DEBUG_STRIPPED 0x0200.Debugging information is removed from the image file.
+
 ![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
+
 </details>
 
 <details><summary>Optional Header 224 bytes</summary>
+
 The Last 128 bytes contain the Data Directory
+
 |:----------------+:---------------+:----------------------------------|
 |Offset           |Value           | Meaning                           |
 |-----------------|----------------|-----------------------------------|
