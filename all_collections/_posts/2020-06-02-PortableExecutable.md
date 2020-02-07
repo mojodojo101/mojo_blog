@@ -120,7 +120,7 @@ The Last 128 bytes contain the Data Directory
 |0x0138           |0x00100000      |Section Alignment [^3]			   |
 |0x013c           |0x00020000      |File Alignment                     |              
 |0x0140+16 bytes  | versions       |A bunch of version Stuff           |
-|0x0150           |0x00600000      |Size of Image [^4]                 |
+|0x0150           |0x00600000      |Size of Image 	                   |
 |0x0154           |0x00400000      |Size of Headers                    |
 |0x0158           |0x00000000      |CheckSum                           |
 |0x015c           |0x0300          |Subsytem                           |
@@ -153,17 +153,17 @@ In our case we have 16 Data Directory Entrys
 |0x017c			  |0x00000000	   |Export Table Size=0				   |
 |0x0180			  |0x4c250000	   |Import Table Address   [^11]	   |
 |0x0184			  |0xA0000000	   |Import Table Size=10			   |
-|0x0188			  |0x00400000	   |Resource Table  [^12]		  	   |
+|0x0188			  |0x00400000	   |Resource Table Address 		  	   |
 |0x018c			  |0xE0010000	   |Resource Table Size				   |
-|0x0190			  |0x00000000	   |Exeption Table Address	[^13]	   |
+|0x0190			  |0x00000000	   |Exeption Table Address			   |
 |0x0194			  |0x00000000	   |Exception Table Size			   |
-|0x0198			  |0x00000000	   |Certificate Table Address [^14]    |
+|0x0198			  |0x00000000	   |Certificate Table Address 	       |
 |0x019c			  |0x00000000	   |Certificate Table Size			   |
-|0x01a0			  |0x00500000	   |Relocation Table Address [^15]	   |
+|0x01a0			  |0x00500000	   |Relocation Table Address 		   |
 |0x01a4			  |0x54010000	   |Relocation Table Size			   |
-|0x01a8			  |0x20210000	   |Debug Data Address	[^16]		   |
+|0x01a8			  |0x20210000	   |Debug Data Address				   |
 |0x01ac			  |0x70000000	   |Debug Data Size					   |
-|0x01b0			  |0x00000000	   |Architecture Data Address [^17]	   |
+|0x01b0			  |0x00000000	   |Architecture Data Address 		   |
 |0x01b4			  |0x00000000	   |Architecture Data Size			   |
 |0x01b8			  |0x00000000	   |Global Pointer Address			   |
 |0x01bc		      |0x00000000	   |Must be 0						   |
@@ -210,10 +210,18 @@ In our case we have 16 Data Directory Entrys
 
 ![Pe Sections. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-sections.PNG)
 
+[Understanding imports. sandsprite.com](http://www.sandsprite.com/CodeStuff/Understanding_imports.html)
+
 #### Footnotes:
 
-
+[^1]: When you atach a debugger the Entry Point will be the location in Virtual Address Space where EIP will first be located.
+[^2]: The Image Base is the point in the Virtual Address Space where you will find the first byte of your Image.
+[^3]: The Section allignment has to be greater than  or equal to the File alignment. This variable determines how memory is mapped from ur disk to random access memory.
 [^6]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for malware.
+[^7]: Each one of the Data Directorys has 2 fields. The first one is a pointer to the Directory and the second one determines the Size. In our example there are 16 Data Directorys. These Directorys contain stuff like import and export table, so they are definetly important for reverse engineering. 
+[^10]: When a table has no entrys the data directory will contain 0x00000000
+[^11]: Might want to read up on the [Import directory table](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#import-directory-table) 
+
 
 
 
