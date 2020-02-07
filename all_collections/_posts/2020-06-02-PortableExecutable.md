@@ -125,7 +125,7 @@ The Last 128 bytes contain the Data Directory
 |0x0178           |0x00000000      |Size of Data directory             |
 
 
-
+![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
 
 
 
