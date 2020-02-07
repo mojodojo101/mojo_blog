@@ -25,6 +25,8 @@ categories: [""]
 #### The other important Source i used is this PDF:
 [Goppit Portable Executable. stondecoder.ord](http://www.stonedcoder.org/~kd/lib/CBJ-2005-74.pdf)
 
+#### There are small differences between x86 and x64 i will focus on x86.
+
 ```cpp
 #include <cstdio>
 
@@ -111,14 +113,14 @@ The Last 128 bytes contain the Data Directory
 |0x011c           |0x000E0000      |Size of Code Section               |
 |0x0120           |0x00140000      |Size of Initialized Data           |
 |0x0124           |0x00000000      |Size of Unitialied Data            |
-|0x0128           |0xB2120000      |Address of Entrypoint              |
+|0x0128           |0xB2120000      |Address of Entrypoint   [^1]       |
 |0x012c           |0x00100000      |Base of Code                       |
 |0x0130           |0x00200000      |Base of Data                       |
-|0x0134           |0x00004000      |Image Base   !!Important           |
-|0x0138           |0x00100000      |Section Alignment !! >= File Align |
+|0x0134           |0x00004000      |Image Base [^2]		               |
+|0x0138           |0x00100000      |Section Alignment [^3]			   |
 |0x013c           |0x00020000      |File Alignment                     |              
 |0x0140+16 bytes  | versions       |A bunch of version Stuff           |
-|0x0150           |0x00600000      |Size of Image                      |
+|0x0150           |0x00600000      |Size of Image [^4]                 |
 |0x0154           |0x00400000      |Size of Headers                    |
 |0x0158           |0x00000000      |CheckSum                           |
 |0x015c           |0x0300          |Subsytem                           |
@@ -127,10 +129,12 @@ The Last 128 bytes contain the Data Directory
 |0x0164           |0x00100000      |Size of Stack Commit               |
 |0x0168           |0x00001000      |Size of Heap Reserve               |
 |0x016c           |0x00100000      |Size of Heap Commit                |
-|0x0170           |0x00000000      |Loader Flags [^1]                  |
-|0x0174           |0x10000000      |Number of directory entries        |
+|0x0170           |0x00000000      |Loader Flags [^6]                  |
+|0x0174           |0x10000000      |Number of directory entries [^7]   |
 |0x0178           |0x00000000      |Virtual address of Data Dir        |
 |0x017c           |0x00000000      |Size of Data directory             |
+
+
 
 ![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
 
@@ -140,19 +144,76 @@ An example how this looks mapped to memory in the debugger. [Immunity](https://w
 
 #### Data Directory 
 
+In our case we have 16 Data Directory Entrys
+
+|:----------------+:---------------+:----------------------------------|
+|Offset           |Value           | Meaning                           |
+|-----------------|----------------|-----------------------------------|
+|0x0178			  |0x00000000	   |Export Table Address=0 [^10]       |
+|0x017c			  |0x00000000	   |Export Table Size=0				   |
+|0x0180			  |0x4c250000	   |Import Table Address   [^11]	   |
+|0x0184			  |0xA0000000	   |Import Table Size=10			   |
+|0x0188			  |0x00400000	   |Resource Table  [^12]		  	   |
+|0x018c			  |0xE0010000	   |Resource Table Size				   |
+|0x0190			  |0x00000000	   |Exeption Table Address	[^13]	   |
+|0x0194			  |0x00000000	   |Exception Table Size			   |
+|0x0198			  |0x00000000	   |Certificate Table Address [^14]    |
+|0x019c			  |0x00000000	   |Certificate Table Size			   |
+|0x01a0			  |0x00500000	   |Relocation Table Address [^15]	   |
+|0x01a4			  |0x54010000	   |Relocation Table Size			   |
+|0x01a8			  |0x20210000	   |Debug Data Address	[^16]		   |
+|0x01ac			  |0x70000000	   |Debug Data Size					   |
+|0x01b0			  |0x00000000	   |Architecture Data Address [^17]	   |
+|0x01b4			  |0x00000000	   |Architecture Data Size			   |
+|0x01b8			  |0x00000000	   |Global Pointer Address			   |
+|0x01bc		      |0x00000000	   |Must be 0						   |
+|0x01c0		      |0x00000000	   |Thread Local Storage Address	   |
+|0x01c4		      |0x00000000	   |Thread Local Storage Size		   |
+|0x01c8		      |0x90210000	   |Load Config Table Address		   |
+|0x01cc		      |0x40000000	   |Load Config Table Size			   |
+|0x01d0		      |0x00000000	   |Bound Import Table Address		   |
+|0x01d4		      |0x00000000	   |Bound Import Table Size			   |
+|0x01d8		      |0x00200000	   |Import Address Table Adress		   |
+|0x01dc		      |0xC4000000	   |Import Address Table Size		   |
+|0x01e0		      |0x00000000	   |Delay-Load Import Table Addr	   |
+|0x01e4		      |0x00000000 	   |Delay-Load Import Table Size	   |
+|0x01e8		      |0x00000000	   |CLR Header Address				   |
+|0x01f0			  |0x00000000	   |CLR Header Size					   |
+|0x01f4			  |0x00000000      |Reserved						   |
+|0x01f8			  |0x00000000      |Reserved						   |
 
 
+![Pe Data Directory](/mojo_blog/assets/pictures/portable-executable/pe-data-directory-entrys.PNG)
+
+#### Section Headers
+
+##### I will only list the .text section for this one.
+
+##### The name of a Section are kept in the first 8 bytes of the Header 
+
+|:----------------+:-----------------+:----------------------------------|
+|Offset           |Value             | Meaning                           |
+|-----------------|------------------|-----------------------------------|
+|0x01F8		      |0x2E74657874000000|Name of Section (here .text)	     |
+|0x0201			  |0xFC0C0000        |Physical Address				     |			   
+|0x0205			  |0x00100000	     |Virtual Size					     |			   
+|0x0209			  |0x00E00000	     |Virtual Address					 |			   
+|0x020D			  |0x00040000	     |Pointer to raw Data				 |			   
+|0x0211			  |0x00000000	     |Pointer to Relocations			 |			   
+|0x0215			  |0x00000000	     |Pointer to Linenumbers		     |			   
+|0x0219			  |0x0000		     |Number of Relocations			     |
+|0x021B			  |0x0000		     |Number of Linenumbers			     |
+|0x021D			  |0x20000006	     |Charackteristics				     |
 
 
-#### Sections
-
+![Pe Section Header](/mojo_blog/assets/pictures/portable-executable/pe-header-section-text.PNG)
 
 ![Pe Sections. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-sections.PNG)
 
 #### Footnotes:
 
 
-[^1]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for malware.
+[^6]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for malware.
 
 
 
