@@ -7,9 +7,16 @@ categories: [""]
 ---
 
 # **Examining Windows EXEs and DLLs**
+#### Tools:
+* [HxD](https://mh-nexus.de/en/hxd/)
+* [Visual Studio](https://visualstudio.microsoft.com/de/vs/?rr=https%3A%2F%2Fwww.google.com%2F)
+* [Pe Explorer](http://www.heaventools.com/)
+* [Immunity](https://www.immunityinc.com/products/debugger/)
+
 
 
 #### This is the source code i used to create an example executable. 
+
 #### I used Visual Studio 2019s default compiler and C++
 
 #### When you dont understand something try to crossreference it with this link:
@@ -117,34 +124,37 @@ The Last 128 bytes contain the Data Directory
 |0x015c           |0x0300          |Subsytem                           |
 |0x015e           |0x4081          |DllCharacteristics  !!Important    |
 |0x0160           |0x00001000      |Size of Stack Reserve              |
-|0x0164           |0x00100000      |Size of Heap Reserve               |
-|0x0168           |0x00001000      |Size of Heap Commit                |
-|0x016c           |0x00100000      |Loader Flags [^1]                  |
-|0x0170           |0x00000000      |Number of directory entries        |
-|0x0174           |0x10000000      |Virtual address of Data directory  |
-|0x0178           |0x00000000      |Size of Data directory             |
-
+|0x0164           |0x00100000      |Size of Stack Commit               |
+|0x0168           |0x00001000      |Size of Heap Reserve               |
+|0x016c           |0x00100000      |Size of Heap Commit                |
+|0x0170           |0x00000000      |Loader Flags [^1]                  |
+|0x0174           |0x10000000      |Number of directory entries        |
+|0x0178           |0x00000000      |Virtual address of Data Dir[^2]    |
+|0x017c           |0x00000000      |Size of Data directory             |
 
 ![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
 
+An example how this looks mapped to memory in the debugger. [Immunity](https://www.immunityinc.com/products/debugger/) :
+
+![Pe Header. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-peheader.PNG)
+
+#### Data Directory 
 
 
 
 
 
+#### Sections
 
 
+![Pe Sections. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-sections.PNG)
+
+#### Footnotes:
 
 
+[^1]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for malware.
 
-
-
-
-
-
-
-[^1]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for Malware
-
+[^2]: That is the offset from the base address of the image. So here it would actually load at 0x10000400. Rember this is little endian so in practice it will look like 0x00400010 in the debugger.
 
 
 
