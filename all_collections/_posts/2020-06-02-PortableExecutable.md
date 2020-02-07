@@ -195,15 +195,15 @@ In our case we have 16 Data Directory Entrys
 |Offset           |Value             | Meaning                           |
 |-----------------|------------------|-----------------------------------|
 |0x01F8		      |0x2E74657874000000|Name of Section (here .text)	     |
-|0x0201			  |0xFC0C0000        |Physical Address				     |			   
-|0x0205			  |0x00100000	     |Virtual Size					     |			   
-|0x0209			  |0x00E00000	     |Virtual Address					 |			   
-|0x020D			  |0x00040000	     |Pointer to raw Data				 |			   
-|0x0211			  |0x00000000	     |Pointer to Relocations			 |			   
-|0x0215			  |0x00000000	     |Pointer to Linenumbers		     |			   
+|0x0200			  |0xFC0C0000        |Virtual Size						 |				     			   			   
+|0x0208			  |0x00100000	     |Virtual Address					 |
+|0x020C			  |0x000E0000	     |Size of Raw Data				     |				   
+|0x0210			  |0x00040000	     |Pointer to raw Data				 |			   
+|0x0214			  |0x00000000	     |Pointer to Relocations			 |			   
+|0x0218			  |0x00000000	     |Pointer to Linenumbers		     |			   
 |0x0219			  |0x0000		     |Number of Relocations			     |
 |0x021B			  |0x0000		     |Number of Linenumbers			     |
-|0x021D			  |0x20000006	     |Charackteristics				     |
+|0x021D			  |0x20000006	     |Charackteristics /permissions      |
 
 
 ![Pe Section Header](/mojo_blog/assets/pictures/portable-executable/pe-header-section-text.PNG)
