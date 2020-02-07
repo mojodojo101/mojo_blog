@@ -129,7 +129,7 @@ The Last 128 bytes contain the Data Directory
 |0x016c           |0x00100000      |Size of Heap Commit                |
 |0x0170           |0x00000000      |Loader Flags [^1]                  |
 |0x0174           |0x10000000      |Number of directory entries        |
-|0x0178           |0x00000000      |Virtual address of Data Dir[^2]    |
+|0x0178           |0x00000000      |Virtual address of Data Dir        |
 |0x017c           |0x00000000      |Size of Data directory             |
 
 ![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
@@ -154,7 +154,6 @@ An example how this looks mapped to memory in the debugger. [Immunity](https://w
 
 [^1]: Certain debuggers cant handle corrupted flags + number of RVA and sizes and will run the exe without debugging. Pretty interesting for malware.
 
-[^2]: That is the offset from the base address of the image. So here it would actually load at 0x10000400. Rember this is little endian so in practice it will look like 0x00400010 in the debugger.
 
 
 
