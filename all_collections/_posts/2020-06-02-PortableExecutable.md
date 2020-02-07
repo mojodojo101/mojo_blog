@@ -71,6 +71,8 @@ This code will simply take the first argument we pass to our Exe and print "Hell
 
 #### File Header
 
+![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
+
 The location of the Header will depend on the E-lfanew value in the Dos Header
 
 |:----------------+:---------------+:--------------------------------------------------------|
@@ -85,7 +87,7 @@ The location of the Header will depend on the E-lfanew value in the Dos Header
 |0x0116           |0x0201          |Characteristics: see below                               |
 
 
-![PE File Header](/mojo_blog/assets/pictures/portable-executable/pe-file-header.PNG)
+
 
 [Characteristics](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#characteristics)
 
@@ -100,6 +102,8 @@ The location of the Header will depend on the E-lfanew value in the Dos Header
 
 
 #### Optional Header 224 bytes
+
+![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
 
 The Last 128 bytes contain the Data Directory
 
@@ -136,13 +140,15 @@ The Last 128 bytes contain the Data Directory
 
 
 
-![Optional Header](/mojo_blog/assets/pictures/portable-executable/pe-optional-header.PNG)
+
 
 An example how this looks mapped to memory in the debugger. [Immunity](https://www.immunityinc.com/products/debugger/) :
 
 ![Pe Header. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-peheader.PNG)
 
 #### Data Directory 
+
+![Pe Data Directory](/mojo_blog/assets/pictures/portable-executable/pe-data-directory-entrys.PNG)
 
 In our case we have 16 Data Directory Entrys
 
@@ -183,9 +189,11 @@ In our case we have 16 Data Directory Entrys
 |0x01f8			  |0x00000000      |Reserved						   |
 
 
-![Pe Data Directory](/mojo_blog/assets/pictures/portable-executable/pe-data-directory-entrys.PNG)
+
 
 #### Section Headers
+
+![Pe Section Header](/mojo_blog/assets/pictures/portable-executable/pe-header-section-text.PNG)
 
 ##### I will only list the .text section for this one.
 
@@ -206,7 +214,7 @@ In our case we have 16 Data Directory Entrys
 |0x021D			  |0x20000006	     |Charackteristics /permissions      |
 
 
-![Pe Section Header](/mojo_blog/assets/pictures/portable-executable/pe-header-section-text.PNG)
+
 
 ![Pe Sections. Immunity](/mojo_blog/assets/pictures/portable-executable/pe-debugger-sections.PNG)
 
