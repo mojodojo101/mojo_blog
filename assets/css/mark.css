@@ -146,7 +146,7 @@ code {
 .highlight .n { color: #ffffff } /* Name */
 .highlight .o { color: #ffffff } /* Operator */
 .highlight .x { color: #ffffff } /* Other */
-.highlight .p { color: #ffffff } /* Punctuation */
+.highlight .p { color: #a09a9a } /* Punctuation */
 .highlight .cm { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Multiline */
 .highlight .cp { color: #ff0007; font-weight: bold; font-style: italic; background-color: #0f140f } /* Comment.Preproc */
 .highlight .c1 { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Single */

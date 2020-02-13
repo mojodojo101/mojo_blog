@@ -32,7 +32,7 @@ nav {
 }
 
 nav a {
-	color: #72b6b5 !important;
+	color: #b666f7 !important;
 	padding-right: 2rem;
 	font-size: 1rem;
 	font-weight: bold;
@@ -56,7 +56,7 @@ main {
 .content a {
 	text-decoration: none;
 	position: relative;
-	color: #f78e66 !important;
+	color: #b666f7 !important;
 	/* color: #72b6b5 !important; */
 }
 
