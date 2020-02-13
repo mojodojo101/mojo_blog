@@ -12,7 +12,7 @@ categories: ["Service Enumeration"]
     download-mibs
     #also in your /etc/snmp/snmp.conf add a # before mibs:
 ```
-![snmp-mibs-conf](mojo_blog/assests/pictures/services/snmp-mibs-conf.PNG)
+![snmp-mibs-conf](/mojo_blog/assests/pictures/services/snmp-mibs-conf.PNG)
 
 
 # Some examples of Oid to plaintext for Windows
