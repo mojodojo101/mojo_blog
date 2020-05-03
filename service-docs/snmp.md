@@ -43,7 +43,7 @@ categories: ["Service Enumeration"]
 
 
 # **[braa](https://github.com/mteg/braa)**
-* I didnt get a chance to teast this one yet 
+* I didnt get a chance to test this one yet 
 * But from what i have heard this lets u download oids way faster
 ```bash
      braa <communitystring>@<ip>:<oid>

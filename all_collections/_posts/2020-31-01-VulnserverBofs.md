@@ -9,7 +9,7 @@ categories: ["PE File Format"]
 
 #### I will add a guide on how to set up Vulnserver #soonTM
 
-Vulnserver exposes a bunch of vunerable commands via an open TCP socket.
+Vulnserver exposes a bunch of vulnerable commands via an open TCP socket.
 There are a bunch of commands which you can fuzz to get the server to crash.
 Below is a list of POCs which are ordered by the command that will trigger the BOF.
 

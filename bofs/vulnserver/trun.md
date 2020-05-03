@@ -8,8 +8,8 @@ categories: ["Bof"]
 
 # ** TRUN **
 
-This is propably the best place to start on vulnserver.
-The function is straight forward once you know what triggers the bof.
+This is probably the best place to start on vulnserver.
+The function is straight forward once you know what triggers the BOF.
 
 I read vulnserver.c but you can also fuzz for these with tools like [spike](https://github.com/guilhermeferreira/spikepp/tree/master/SPIKE).
 
@@ -94,7 +94,7 @@ send payload to 192.168.138.139:9999 with total length of 2018 .
 
 We overwrote EIP with 4* 0x44 which corresponds to the bytes 2013-2016 since the last two bytes are our \r\n.
 
-Now we should check for bad chars by using the -f fuzzbc (Fuzz bad charackters) Fucntion.
+Now we should check for bad chars by using the -f fuzzbc (Fuzz bad characters) function.
 
 ```bash
 root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 2018 -i 192.168.138.139 -p 9999 func fuzzbc
@@ -105,7 +105,7 @@ send payload to 192.168.138.139:9999 with total length of 2274 .
 
 ![trun-bc-1](/mojo_blog/assets/pictures/bofs/vulnserver/trun-bc-1.PNG)
 
-The first byte in our bad chars fuzz buffer "0x00" stopped the server from recieving more information.
+The first byte in our bad chars fuzz buffer "0x00" stopped the server from receiving more information.
 We add the -b "0x00" flag to blacklist that byte.
 
 ```
@@ -118,7 +118,7 @@ Now it seems like the fuzzing chars all went through
 
 ![trun-gc-2](/mojo_blog/assets/pictures/bofs/vulnserver/trun-gc-2.PNG)
 
-We can check this buy subtracting the amount of bad chars we removed from our 256-char buffer. We only removed 1 char so our buffer should be 255 bytes long.
+We can check this by subtracting the amount of bad chars we removed from our 256-char buffer. We only removed 1 char so our buffer should be 255 bytes long.
 And indeed our buffer stops exactly at 0x23dfadf.
 
 ```bash

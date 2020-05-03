@@ -23,4 +23,4 @@ categories: ["Service Enumeration"]
 
 
 
-## [SNMP Simple Network Managment Protocol](/mojo_blog/service-docs/snmp.html)
+## [SNMP Simple Network Management Protocol](/mojo_blog/service-docs/snmp.html)
