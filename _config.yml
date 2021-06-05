@@ -17,7 +17,7 @@ timezone: Europe/Berlin
 # --------------------------
 title: Mojodojo's Blog                         # the main title
 
-tagline: https://discord.gg/infosecprep   # it will display as the sub-title
+tagline: discord.gg/infosecprep   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Just another Infosec blog :p
