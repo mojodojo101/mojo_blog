@@ -44,4 +44,4 @@ EXIT
 ```
 
 
-## [Vulnserver TRUN ](/bofs/vulnserver/trun.html)
+## [Vulnserver TRUN ](/posts/trun/)
