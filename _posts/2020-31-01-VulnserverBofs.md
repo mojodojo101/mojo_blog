@@ -44,4 +44,4 @@ EXIT
 ```
 
 
-## [Vulnserver TRUN ](/mojo_blog/posts/trun/)
+## [Vulnserver TRUN ](/posts/trun/)
